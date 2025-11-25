@@ -1,9 +1,5 @@
-// File: com/fooddelivery/model/OrderItem.java
 package foodDelivery.model;
 
-/**
- * OrderItem class representing items in an order
- */
 public class OrderItem {
     private int itemId;
     private String itemName;
@@ -19,7 +15,6 @@ public class OrderItem {
         this.subtotal = price * quantity;
     }
 
-    // Getters and Setters
     public int getItemId() {
         return itemId;
     }

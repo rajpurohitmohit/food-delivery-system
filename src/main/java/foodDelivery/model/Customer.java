@@ -1,9 +1,5 @@
-// File: com/fooddelivery/model/Customer.java
 package foodDelivery.model;
 
-/**
- * Customer class demonstrating Inheritance and Polymorphism
- */
 public class Customer extends User {
     private String address;
 
@@ -13,8 +9,7 @@ public class Customer extends User {
         this.address = address;
     }
 
-    // Implementing abstract method (Runtime Polymorphism)
-    @Override
+    // Abstract method
     public void displayInfo() {
         System.out.println("\n=== Customer Information ===");
         System.out.println("ID: " + getUserId());

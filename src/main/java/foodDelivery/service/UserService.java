@@ -1,4 +1,3 @@
-// File: com/fooddelivery/service/UserService.java
 package foodDelivery.service;
 
 import foodDelivery.model.Customer;
@@ -6,18 +5,10 @@ import foodDelivery.model.Restaurant;
 import foodDelivery.exception.InvalidUserException;
 import foodDelivery.exception.OrderException;
 import foodDelivery.util.DatabaseConnection;
-
 import java.sql.*;
 
-/**
- * Service class for User operations
- * Demonstrates: JDBC operations, PreparedStatement, Exception Handling
- */
 public class UserService {
 
-    /**
-     * Cancel an order
-     */
     public void cancelOrder(int orderId) throws OrderException {
         String sql = "UPDATE orders SET status = 'CANCELLED' WHERE order_id = ? AND status = 'PENDING'";
         
@@ -46,12 +37,8 @@ public class UserService {
         }
     }
 
-    /**
-     * Register a new customer
-     * Demonstrates: Input validation, PreparedStatement, Exception throwing
-     */
+    
     public void registerCustomer(Customer customer) throws InvalidUserException {
-        // Input validation
         if (customer.getEmail() == null || customer.getEmail().trim().isEmpty()) {
             throw new InvalidUserException("Email cannot be empty");
         }
@@ -87,7 +74,6 @@ public class UserService {
             int rowsAffected = pstmt.executeUpdate();
             
             if (rowsAffected > 0) {
-                // Get generated ID
                 rs = pstmt.getGeneratedKeys();
                 if (rs.next()) {
                     customer.setUserId(rs.getInt(1));
@@ -99,7 +85,6 @@ public class UserService {
         } catch (SQLException e) {
             throw new InvalidUserException("Failed to register customer: " + e.getMessage(), e);
         } finally {
-            // Proper resource cleanup in finally block
             try {
                 if (rs != null) rs.close();
                 if (pstmt != null) pstmt.close();
@@ -110,10 +95,7 @@ public class UserService {
         }
     }
 
-    /**
-     * Login customer with email and password
-     * Demonstrates: PreparedStatement, ResultSet processing
-     */
+
     public Customer loginCustomer(String email, String password) throws InvalidUserException {
         if (email == null || email.trim().isEmpty()) {
             throw new InvalidUserException("Email cannot be empty");
@@ -165,10 +147,7 @@ public class UserService {
         }
     }
 
-    /**
-     * Register a new restaurant
-     * Demonstrates: Transaction-like validation and insert
-     */
+    
     public void registerRestaurant(Restaurant restaurant) throws InvalidUserException {
         if (restaurant.getEmail() == null || restaurant.getEmail().trim().isEmpty()) {
             throw new InvalidUserException("Email cannot be empty");
@@ -186,7 +165,7 @@ public class UserService {
             throw new InvalidUserException("Restaurant name cannot be empty");
         }
 
-        String sql = "INSERT INTO restaurants (name, email, phone, address, cuisine_type, password) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO restaurants (name, email, phone, address, password) VALUES (?, ?, ?, ?, ?)";
         
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -200,8 +179,7 @@ public class UserService {
             pstmt.setString(2, restaurant.getEmail());
             pstmt.setString(3, restaurant.getPhone());
             pstmt.setString(4, restaurant.getAddress());
-            pstmt.setString(5, restaurant.getCuisineType());
-            pstmt.setString(6, restaurant.getPassword());
+            pstmt.setString(5, restaurant.getPassword());
             
             int rowsAffected = pstmt.executeUpdate();
             
@@ -227,9 +205,7 @@ public class UserService {
         }
     }
 
-    /**
-     * Login restaurant with email and password
-     */
+
     public Restaurant loginRestaurant(String email, String password) throws InvalidUserException {
         if (email == null || email.trim().isEmpty()) {
             throw new InvalidUserException("Email cannot be empty");
@@ -260,11 +236,9 @@ public class UserService {
                     rs.getString("email"),
                     rs.getString("phone"),
                     rs.getString("address"),
-                    rs.getString("cuisine_type"),
                     rs.getString("password")
                 );
                 restaurant.setRestaurantId(rs.getInt("restaurant_id"));
-                restaurant.setRating(rs.getDouble("rating"));
                 restaurant.setActive(rs.getBoolean("is_active"));
                 return restaurant;
             } else {
@@ -284,9 +258,7 @@ public class UserService {
         }
     }
     
-    /**
-     * Get customer by ID
-     */
+    
     public Customer getCustomerById(int customerId) throws InvalidUserException {
         String sql = "SELECT * FROM customers WHERE customer_id = ?";
         

@@ -1,4 +1,3 @@
-// File: com/fooddelivery/service/OrderService.java
 package foodDelivery.service;
 
 import foodDelivery.model.Order;
@@ -13,20 +12,12 @@ import java.util.List;
 
 public class OrderService {
 
-    /**
-     * Start order processing in a separate thread
-     * Demonstrates: Multithreading integration
-     */
     public void startOrderProcessing(Order order) {
         OrderProcessingThread thread = new OrderProcessingThread(order);
         thread.start();
-        System.out.println("✓ Order processing started in background (Thread ID: " + thread.threadId() + ")");
     }
 
-    /**
-     * Place a new order
-     * Demonstrates: Transaction management with commit/rollback
-     */
+
     public void placeOrder(Order order) throws OrderException {
         if (order.getItems().isEmpty()) {
             throw new OrderException("Cannot place order with no items");
@@ -43,9 +34,8 @@ public class OrderService {
         
         try {
             conn = DatabaseConnection.getConnection();
-            conn.setAutoCommit(false); // Start transaction
+            conn.setAutoCommit(false); 
             
-            // Insert order
             String orderSql = "INSERT INTO orders (customer_id, restaurant_id, total_amount, status) VALUES (?, ?, ?, ?)";
             orderStmt = conn.prepareStatement(orderSql, Statement.RETURN_GENERATED_KEYS);
             
@@ -56,7 +46,6 @@ public class OrderService {
             
             orderStmt.executeUpdate();
             
-            // Get generated order ID
             rs = orderStmt.getGeneratedKeys();
             if (rs.next()) {
                 order.setOrderId(rs.getInt(1));
@@ -64,7 +53,6 @@ public class OrderService {
                 throw new OrderException("Failed to get order ID");
             }
             
-            // Insert order items
             String itemSql = "INSERT INTO order_items (order_id, item_id, item_name, price, quantity, subtotal) VALUES (?, ?, ?, ?, ?, ?)";
             itemStmt = conn.prepareStatement(itemSql);
             
@@ -78,10 +66,9 @@ public class OrderService {
                 itemStmt.executeUpdate();
             }
             
-            conn.commit(); // Commit transaction if all successful
+            conn.commit(); 
             
         } catch (SQLException e) {
-            // Rollback on any error
             if (conn != null) {
                 try {
                     conn.rollback();
@@ -97,7 +84,7 @@ public class OrderService {
                 if (orderStmt != null) orderStmt.close();
                 if (itemStmt != null) itemStmt.close();
                 if (conn != null) {
-                    conn.setAutoCommit(true); // Reset auto-commit
+                    conn.setAutoCommit(true);
                     conn.close();
                 }
             } catch (SQLException e) {
@@ -106,10 +93,7 @@ public class OrderService {
         }
     }
 
-    /**
-     * Get all orders for a customer
-     * Demonstrates: Complex query with multiple table access
-     */
+    
     public List<Order> getCustomerOrders(int customerId) {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE customer_id = ? ORDER BY order_date DESC";
@@ -135,7 +119,6 @@ public class OrderService {
                 order.setStatus(rs.getString("status"));
                 order.setOrderDate(rs.getTimestamp("order_date"));
                 
-                // Load order items for each order
                 loadOrderItems(order);
                 orders.add(order);
             }
@@ -155,9 +138,6 @@ public class OrderService {
         return orders;
     }
 
-    /**
-     * Get all orders for a restaurant
-     */
     public List<Order> getRestaurantOrders(int restaurantId) {
         List<Order> orders = new ArrayList<>();
         String sql = "SELECT * FROM orders WHERE restaurant_id = ? ORDER BY order_date DESC";
@@ -202,10 +182,6 @@ public class OrderService {
         return orders;
     }
 
-    /**
-     * Load order items for a specific order
-     * Helper method demonstrating modular code design
-     */
     private void loadOrderItems(Order order) {
         String sql = "SELECT * FROM order_items WHERE order_id = ?";
         
@@ -243,12 +219,8 @@ public class OrderService {
         }
     }
 
-    /**
-     * Update order status
-     * Demonstrates: UPDATE query with validation
-     */
+
     public void updateOrderStatus(int orderId, String status) throws OrderException {
-        // Validate status
         String[] validStatuses = {"PENDING", "CONFIRMED", "PREPARING", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED"};
         boolean isValid = false;
         for (String validStatus : validStatuses) {
@@ -291,9 +263,6 @@ public class OrderService {
         }
     }
 
-    /**
-     * Get order by ID
-     */
     public Order getOrderById(int orderId) throws OrderException {
         String sql = "SELECT * FROM orders WHERE order_id = ?";
         

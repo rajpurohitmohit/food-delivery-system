@@ -1,33 +1,23 @@
-// File: com/fooddelivery/model/Restaurant.java
 package foodDelivery.model;
 
-/**
- * Restaurant class with additional properties
- */
 public class Restaurant {
     private int restaurantId;
     private String name;
     private String email;
     private String phone;
     private String address;
-    private String cuisineType;
     private String password;
-    private double rating;
     private boolean isActive;
 
-    public Restaurant(String name, String email, String phone, String address, 
-                     String cuisineType, String password) {
+    public Restaurant(String name, String email, String phone, String address, String password) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.address = address;
-        this.cuisineType = cuisineType;
         this.password = password;
-        this.rating = 0.0;
         this.isActive = true;
     }
-
-    // Getters and Setters
+    
     public int getRestaurantId() {
         return restaurantId;
     }
@@ -68,13 +58,6 @@ public class Restaurant {
         this.address = address;
     }
 
-    public String getCuisineType() {
-        return cuisineType;
-    }
-
-    public void setCuisineType(String cuisineType) {
-        this.cuisineType = cuisineType;
-    }
 
     public String getPassword() {
         return password;
@@ -82,14 +65,6 @@ public class Restaurant {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
     }
 
     public boolean isActive() {
@@ -104,9 +79,7 @@ public class Restaurant {
         System.out.println("\n=== Restaurant Information ===");
         System.out.println("ID: " + restaurantId);
         System.out.println("Name: " + name);
-        System.out.println("Cuisine: " + cuisineType);
         System.out.println("Phone: " + phone);
         System.out.println("Address: " + address);
-        System.out.println("Rating: " + rating);
     }
 }

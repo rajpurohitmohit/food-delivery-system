@@ -1,6 +1,5 @@
 package foodDelivery;
 
-// File: FoodDeliverySystem.java
 import foodDelivery.service.*;
 import foodDelivery.model.*;
 import foodDelivery.exception.*;
@@ -9,10 +8,7 @@ import foodDelivery.util.DatabaseConnection;
 import java.util.Scanner;
 import java.util.List;
 
-/**
- * Main Application Class for Food Delivery System
- * Demonstrates: OOP concepts, Exception Handling, Package usage
- */
+
 public class FoodDeliverySystem {
     private UserService userService;
     private RestaurantService restaurantService;
@@ -29,7 +25,6 @@ public class FoodDeliverySystem {
     public static void main(String[] args) {
         System.out.println("=== Food Delivery System ===\n");
         
-        // Initialize database
         try {
             DatabaseConnection.initializeDatabase();
             System.out.println("Database initialized successfully!\n");
@@ -55,7 +50,7 @@ public class FoodDeliverySystem {
                 System.out.print("Choose option: ");
 
                 int choice = scanner.nextInt();
-                scanner.nextLine(); // consume newline
+                scanner.nextLine(); 
 
                 switch (choice) {
                     case 1:
@@ -76,7 +71,7 @@ public class FoodDeliverySystem {
                 }
             } catch (Exception e) {
                 System.err.println("Error: " + e.getMessage());
-                scanner.nextLine(); // clear buffer
+                scanner.nextLine();
             }
         }
 
@@ -137,7 +132,7 @@ public class FoodDeliverySystem {
         boolean back = false;
 
         while (!back) {
-            try {
+            try { 
                 System.out.println("\n=== Customer Dashboard ===");
                 System.out.println("Welcome, " + customer.getName() + "!");
                 System.out.println("1. Browse Restaurants");
@@ -182,8 +177,7 @@ public class FoodDeliverySystem {
 
         System.out.println("\n=== Available Restaurants ===");
         for (int i = 0; i < restaurants.size(); i++) {
-            System.out.println((i + 1) + ". " + restaurants.get(i).getName() + 
-                             " - " + restaurants.get(i).getCuisineType());
+            System.out.println((i + 1) + ". " + restaurants.get(i).getName());
         }
 
         System.out.print("Select restaurant (number): ");
@@ -247,7 +241,6 @@ public class FoodDeliverySystem {
             orderService.placeOrder(order);
             System.out.println("\n✓ Order placed successfully! Order ID: " + order.getOrderId());
             
-            // Start order processing in separate thread
             orderService.startOrderProcessing(order);
         } else {
             System.out.println("Order cancelled.");
@@ -297,13 +290,11 @@ public class FoodDeliverySystem {
         String phone = scanner.nextLine();
         System.out.print("Enter address: ");
         String address = scanner.nextLine();
-        System.out.print("Enter cuisine type: ");
-        String cuisineType = scanner.nextLine();
         System.out.print("Enter password: ");
         String password = scanner.nextLine();
 
         Restaurant restaurant = new Restaurant(name, email, phone, address, 
-                                               cuisineType, password);
+                                            password);
         userService.registerRestaurant(restaurant);
         System.out.println("Restaurant registered! ID: " + restaurant.getRestaurantId());
     }
@@ -440,8 +431,7 @@ public class FoodDeliverySystem {
         System.out.println("\n=== Available Restaurants ===");
         for (Restaurant restaurant : restaurants) {
             System.out.printf("%s - %s\n  Address: %s\n  Phone: %s\n\n",
-                restaurant.getName(), restaurant.getCuisineType(),
-                restaurant.getAddress(), restaurant.getPhone());
+                restaurant.getName(), restaurant.getAddress(), restaurant.getPhone());
         }
     }
 }

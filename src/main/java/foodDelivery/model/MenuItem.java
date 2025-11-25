@@ -1,10 +1,6 @@
-// File: com/fooddelivery/model/MenuItem.java
 package foodDelivery.model;
 
-/**
- * MenuItem class representing food items
- */
-public class MenuItem {
+public class MenuItem {    
     private int itemId;
     private int restaurantId;
     private String name;
@@ -13,8 +9,7 @@ public class MenuItem {
     private String category;
     private boolean isAvailable;
 
-    public MenuItem(int restaurantId, String name, String description, 
-                   double price, String category) {
+    public MenuItem(int restaurantId, String name, String description, double price, String category) {
         this.restaurantId = restaurantId;
         this.name = name;
         this.description = description;
@@ -23,7 +18,7 @@ public class MenuItem {
         this.isAvailable = true;
     }
 
-    // Getters and Setters
+
     public int getItemId() {
         return itemId;
     }

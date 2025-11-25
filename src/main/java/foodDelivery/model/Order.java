@@ -1,12 +1,7 @@
-// File: com/fooddelivery/model/Order.java
 package foodDelivery.model;
-
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * Order class managing customer orders
- */
 public class Order {
     private int orderId;
     private int customerId;
@@ -35,6 +30,7 @@ public class Order {
         calculateTotal();
     }
 
+    // For-each Loop
     private void calculateTotal() {
         totalAmount = 0.0;
         for (OrderItem item : items) {
@@ -42,7 +38,6 @@ public class Order {
         }
     }
 
-    // Getters and Setters
     public int getOrderId() {
         return orderId;
     }

@@ -6,21 +6,14 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-/**
- * Utility class for generating file-based reports
- * Demonstrates: File I/O operations, FileWriter, Exception handling
- */
+
 public class FileReportGenerator {
     
     private static final String REPORT_DIR = "reports/";
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss");
     
-    /**
-     * Generate sales report from ResultSet
-     * Demonstrates: File writing, ResultSet processing
-     */
+
     public static void generateSalesReport(int restaurantId, ResultSet rs) {
-        // Create reports directory if it doesn't exist
         File dir = new File(REPORT_DIR);
         if (!dir.exists()) {
             dir.mkdirs();
@@ -34,18 +27,17 @@ public class FileReportGenerator {
         try {
             writer = new FileWriter(filename);
             
-            // Write header
             writer.write("=".repeat(80) + "\n");
             writer.write("SALES REPORT - Restaurant ID: " + restaurantId + "\n");
             writer.write("Generated: " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")) + "\n");
             writer.write("=".repeat(80) + "\n");
             writer.write("\n");
             
-            // Write column headers
+
             writer.write(String.format("%-12s %-20s %-15s %-25s", "Order ID", "Total Amount", "Status", "Order Date") + "\n");
             writer.write("-".repeat(80) + "\n");
             
-            // Write data
+
             double totalSales = 0.0;
             int orderCount = 0;
             
@@ -64,7 +56,7 @@ public class FileReportGenerator {
                 orderCount++;
             }
             
-            // Write footer
+
             writer.write("\n");
             writer.write("-".repeat(80) + "\n");
             writer.write(String.format("Total Orders: %d", orderCount) + "\n");

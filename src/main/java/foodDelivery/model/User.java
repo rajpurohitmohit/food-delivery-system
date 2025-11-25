@@ -1,10 +1,5 @@
-// File: com/fooddelivery/model/User.java
 package foodDelivery.model;
 
-/**
- * Abstract base class demonstrating Abstraction and Inheritance
- * Contains common properties for all users
- */
 public abstract class User {
     private int userId;
     private String name;
@@ -20,10 +15,10 @@ public abstract class User {
         this.password = password;
     }
 
-    // Abstract method - must be implemented by subclasses
+    // Abstract method 
     public abstract void displayInfo();
 
-    // Getters and Setters (Encapsulation)
+
     public int getUserId() {
         return userId;
     }
