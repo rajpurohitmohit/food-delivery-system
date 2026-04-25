@@ -34,8 +34,9 @@ public class OrderProcessingThread extends Thread {
             
         } catch (OrderException e) {
             System.err.println("Error updating order: " + e.getMessage());
-        } catch (Exception e) {
-            System.err.println("Order processing interrupted");
+        } catch (InterruptedException e) {
+            System.err.println("Order processing interrupted for order #" + order.getOrderId());
+            Thread.currentThread().interrupt();
         }
     }
 

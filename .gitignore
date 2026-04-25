@@ -1,1 +1,10 @@
+.DS_Store
+*.class
+bin/
+target/
+.idea/
+*.iml
+.vscode/
+.env
+reports/
 utils.md

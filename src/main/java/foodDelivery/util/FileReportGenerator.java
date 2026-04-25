@@ -22,10 +22,7 @@ public class FileReportGenerator {
         String timestamp = LocalDateTime.now().format(DATE_FORMATTER);
         String filename = REPORT_DIR + "sales_report_restaurant_" + restaurantId + "_" + timestamp + ".txt";
         
-        FileWriter writer = null;
-        
-        try {
-            writer = new FileWriter(filename);
+        try (FileWriter writer = new FileWriter(filename)) {
             
             writer.write("=".repeat(80) + "\n");
             writer.write("SALES REPORT - Restaurant ID: " + restaurantId + "\n");
@@ -69,14 +66,6 @@ public class FileReportGenerator {
             System.err.println("Error reading data from ResultSet: " + e.getMessage());
         } catch (IOException e) {
             System.err.println("Error writing report file: " + e.getMessage());
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException e) {
-                System.err.println("Error closing file writer: " + e.getMessage());
-            }
         }
     }
 }

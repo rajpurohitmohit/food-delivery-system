@@ -4,33 +4,44 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.Properties;
 
 
 public class DatabaseConnection {
     private static final String DB_URL = "jdbc:mysql://127.0.0.1:3306/food_delivery_db";
     private static final String DB_NAME = "food_delivery_db";
     private static final String DB_URL_WITH_DB = "jdbc:mysql://127.0.0.1:3306/food_delivery_db";
-    private static final String USERNAME = "root";  
-    private static final String PASSWORD = "Sql@2025";  
     
-    private static Connection connection = null;
+    private static String USERNAME;
+    private static String PASSWORD;
+    
+    static {
+        Properties props = new Properties();
+        try (FileInputStream fis = new FileInputStream(".env")) {
+            props.load(fis);
+            USERNAME = props.getProperty("DB_USER", "root");
+            PASSWORD = props.getProperty("DB_PASSWORD", "Sql@2025");
+        } catch (IOException e) {
+            System.err.println("Warning: Could not read .env file, falling back to default credentials");
+            USERNAME = "root";
+            PASSWORD = "Sql@2025";
+        }
+    }
+    
 
     /**
-     * @return 
+     * @return A new database Connection
      * @throws SQLException 
      */
     public static Connection getConnection() throws SQLException {
-        if (connection == null || connection.isClosed()) {
-            try {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                
-                connection = DriverManager.getConnection(DB_URL_WITH_DB, USERNAME, PASSWORD);
-                System.out.println("Database connection established successfully!");
-            } catch (ClassNotFoundException e) {
-                throw new SQLException("MySQL JDBC Driver not found. Make sure to add mysql-connector-java to your project.", e);
-            }
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            return DriverManager.getConnection(DB_URL_WITH_DB, USERNAME, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("MySQL JDBC Driver not found. Make sure to add mysql-connector-java to your project.", e);
         }
-        return connection;
     }
 
     /**
@@ -126,26 +137,8 @@ public class DatabaseConnection {
         }
     }
 
-    /**
-     * Close database connection
-     */
-    public static void closeConnection() {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                connection.close();
-                System.out.println("Database connection closed!");
-            }
-        } catch (SQLException e) {
-            System.err.println("Error closing connection: " + e.getMessage());
-        }
-    }
-
-    /**
-     * Test database connection
-     */
     public static boolean testConnection() {
-        try {
-            Connection conn = getConnection();
+        try (Connection conn = getConnection()) {
             return conn != null && !conn.isClosed();
         } catch (SQLException e) {
             System.err.println("Connection test failed: " + e.getMessage());
